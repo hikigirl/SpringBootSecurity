@@ -29,6 +29,7 @@
     - `header.html` : 공통 메뉴
 
 ## 스프링부트 시큐리티 설정하기
+- Spring Boot에서는 XML 대신 Config.java로 제어하는 편
 - com.test.security.config
   - `SecurityConfig.java`
 
@@ -36,3 +37,5 @@
 - 기본으로 `user` 계정이 제공된다.
 - 비밀번호는 서버 시작 시 콘솔에 찍힘
 - 기본으로 모든 페이지가 인증 사용자만 접근할 수 있다.
+
+### 로그인 기능 구현하기
