@@ -20,11 +20,13 @@
 ## 파일 생성하기
 - com.test.security.controller
   - `MainController.java`
+  - `AuthController.java`: 로그인 기능 구현하기
 - template
   - `template.html`
   - `index.html`: 시작 페이지
   - `member.html`: 회원 페이지
   - `admin.html`: 관리자 페이지
+  - `login.html`: 로그인 페이지
   - `inc`
     - `header.html` : 공통 메뉴
 
@@ -39,3 +41,4 @@
 - 기본으로 모든 페이지가 인증 사용자만 접근할 수 있다.
 
 ### 로그인 기능 구현하기
+- 

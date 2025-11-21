@@ -4,6 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -14,9 +19,43 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //접근 권한 제어하기(URI 허가 정책)
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/").permitAll()
+                .requestMatchers("/", "/login").permitAll()
+                .requestMatchers("/member").hasRole("MEMBER") //ROLE_MEMBER에서 ROLE_을 생략 가능
+                .requestMatchers("/admin").hasRole("ADMIN")
+                .anyRequest().authenticated() //위에 지정한 페이지 이외의 나머지 URI에 대한 권한 막기
+        );
+        //개발 도중에 CSRF 토큰 비활성화
+        //http.csrf(auth -> auth.disable());
+
+        //커스텀 로그인 페이지
+        http.formLogin(form -> form
+                .loginPage("/login") //로그인 페이지
+                .loginProcessingUrl("/loginok") //로그인 처리 페이지, form 태그의 action 값
         );
 
+        //예외 처리(권한 관련)
+
         return http.build();
+    }
+
+    @Bean
+    BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        UserDetails dog = User.builder()
+                .username("dog")
+                .password(bCryptPasswordEncoder().encode("1111"))
+                .roles("MEMBER")
+                .build();
+        UserDetails tiger = User.builder()
+                .username("tiger")
+                .password(bCryptPasswordEncoder().encode("1111"))
+                .roles("ADMIN", "MEMBER")
+                .build();
+        //인메모리
+        return new InMemoryUserDetailsManager(dog, tiger);
     }
 }
