@@ -1,5 +1,6 @@
 package com.test.security.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +21,8 @@ public class SecurityConfig {
         //접근 권한 제어하기(URI 허가 정책)
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login", "/join", "joinok").permitAll()
+                //.requestMatchers("/images/**").permitAll() //정적 자원도 반드시 권한 허용해야한다.
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //이렇게 사용하면 정적 자원 따로 허용할 필요 없다.
                 .requestMatchers("/member").hasRole("MEMBER") //ROLE_MEMBER에서 ROLE_을 생략 가능
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated() //위에 지정한 페이지 이외의 나머지 URI에 대한 권한 막기
