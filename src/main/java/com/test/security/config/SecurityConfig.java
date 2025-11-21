@@ -33,7 +33,19 @@ public class SecurityConfig {
                 .loginProcessingUrl("/loginok") //로그인 처리 페이지, form 태그의 action 값
         );
 
-        //예외 처리(권한 관련)
+        //예외 처리(권한&인증 관련, 401, 403)
+        http.exceptionHandling(e -> e
+                .authenticationEntryPoint((request, response, authException) -> {
+                    //401 Unauthorized: 인증 실패
+                    // 익명 사용자가 인증 사용자 URL에 접속
+                    response.sendRedirect("/login");
+                })
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    //403 Forbidden: 권한 부족? 허가 실패
+                    // 인증했지만 권한(Role)이 없어서 발생
+                    response.sendRedirect("/denied");
+                })
+        );
 
         return http.build();
     }

@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class AuthController {
+    //403 forbidden 예외처리 페이지
+    @GetMapping("/denied")
+    public String denied() {
+        return "denied";
+    }
     //로그인
     @GetMapping("/login")
     public String login() {
