@@ -51,3 +51,10 @@
 - 기본으로 `user` 계정이 제공된다.
 - 비밀번호는 서버 시작 시 콘솔에 찍힘
 - 기본으로 모든 페이지가 인증 사용자만 접근할 수 있다.
+
+
+DB 기반 로그인
+- com.test.security.dto > "CustomUserDetails.java"
+- com.test.security.service > "CustomUserDetailsService.java"
+
+- 기존 사용중인 In-memory > 주석
